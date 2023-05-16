@@ -3,7 +3,7 @@ const Genres = require('../models/Genres');
 const Movies = require('../models/Movies');
 
 const getAll = catchError(async(req, res) => {
-    const results = await Genres.findAll({include:[Movies]});
+    const results = await Genres.findAll();
     return res.json(results);
 });
 

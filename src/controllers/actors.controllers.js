@@ -2,7 +2,7 @@ const catchError = require('../utils/catchError');
 const Actors = require('../models/Actors');
 
 const getAll = catchError(async(req, res) => {
-    const results = await Actors.findAll({include:[Movies]});
+    const results = await Actors.findAll();
     return res.json(results);
 });
 
