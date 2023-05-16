@@ -10,7 +10,7 @@ const Movies = sequelize.define('movies', {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    sypnosis: {
+    synopsis: {
         type: DataTypes.TEXT,
         allowNull: false
     },
