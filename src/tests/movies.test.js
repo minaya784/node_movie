@@ -1,5 +1,8 @@
 const request = require('supertest');
 const app = require('../app');
+const Genres = require('../models/Genres');
+const Actors = require('../models/Actors');
+const Directors = require('../models/Directors');
 require('../models');
 
 let movieId;
@@ -21,6 +24,9 @@ test('GET /movies should return all movies', async () => {
     const res = await request(app).get('/movies');
     expect(res.status).toBe(200);
     expect(res.body).toHaveLength(1);  
+    expect(res.body[0].actors).toBeDefined();
+    expect(res.body[0].directors).toBeDefined();
+    expect(res.body[0].genres).toBeDefined();
 });
 
 test('PUT /movies/:id should update one movies', async () => {
@@ -37,9 +43,39 @@ test('PUT /movies/:id should update one movies', async () => {
     expect(res.body.firstName).toBe(movieUpdated.firstName);
 });
 
-test('POST /movies/:id/genres should set the artist genres', async () => {
-    const genre = await Genre.create({
-        name: "R&B"
+test('POST /movies/:id/actors should set the movies actors', async () => {
+    const actor = await Actors.create({
+    firstName:"German",
+    lastName:"Liriano",
+    nationality:"Dominican",
+    image:"",
+    birthday:"1980-04-18"
+    })
+    const res = await request(app)
+        .post(`/movies/${movieId}/actors`)
+        .send([actor.id]);
+    await actor.destroy();
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+});
+test('POST /movies/:id/directors should set the movies directors', async () => {
+    const director = await Directors.create({
+    firstName:"Minaya",
+    lastName:"Liriano",
+    nationality:"Dominican",
+    image:"",
+    birthday:"1970-09-25"
+    })
+    const res = await request(app)
+        .post(`/movies/${movieId}/directors`)
+        .send([director.id]);
+    await director.destroy();
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+});
+test('POST /movies/:id/genres should set the movies genre', async () => {
+    const genre = await Genres.create({
+        name: "Drama"
     })
     const res = await request(app)
         .post(`/movies/${movieId}/genres`)
